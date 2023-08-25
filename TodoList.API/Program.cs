@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using TodoList.API.Repositories;
 using TodoList.API.Dtos;
 using TodoList.API.Models;
-using TodoList.API.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,25 +31,6 @@ app.UseHttpsRedirection();
 
 var todosGroup = app.MapGroup("/todos");
 
-// AuthController
-app.MapPost("/api/register", async (IUserRepository userRepository, RegisterDto registerDto) =>
-{
-    if (await userRepository.GetUserByUsername(registerDto.Username) != null)
-    {
-        return Results.BadRequest("Username already exists.");
-    }
-
-    var newUser = new User
-    {
-        Username = registerDto.Username,
-        PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password)
-    };
-    await userRepository.CreateUser(newUser);
-
-    return Results.Created("User created.");
-});
-
-// TodoController
 todosGroup.MapGet("/", async (ITodoRepository todoRepository) =>
 {
     var todos = await todoRepository.GetTodos();
@@ -82,12 +62,6 @@ todosGroup.MapGet("/{title}", async (ITodoRepository todoRepository, string titl
     return Results.Ok(todo);
 });
 
-/*todosGroup.MapGet("/users/{userId:int}", async (ITodoRepository todoRepository, int userId) =>
-{
-    var todos = await todoRepository.GetTodosByUserId(userId);
-    return Results.Ok(todos);
-});*/
-
 todosGroup.MapPost("/", async (ITodoRepository todoRepository, TodoDto todoDto) =>
 {
     var newTodo = new Todo
@@ -95,7 +69,6 @@ todosGroup.MapPost("/", async (ITodoRepository todoRepository, TodoDto todoDto) 
         Title = todoDto.Title,
         Description = todoDto.Description,
         IsCompleted = false,
-        //UserId = todoDto.UserId
     };
     await todoRepository.CreateTodo(newTodo);
 

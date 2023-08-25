@@ -15,7 +15,4 @@ public class Todo
     public required string Description { get; set; }
 
     public bool IsCompleted { get; set; } = false;
-
-    public int UserId { get; set; }
-    public required User User { get; set; }
 }

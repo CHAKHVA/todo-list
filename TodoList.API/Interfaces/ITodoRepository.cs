@@ -10,5 +10,4 @@ public interface ITodoRepository
     Task<Todo> GetTodoByTitle(string title);
     Task UpdateTodo(Todo todo);
     Task DeleteTodo(int id);
-    Task<ICollection<Todo>> GetTodosByUserId(int userId);
 }

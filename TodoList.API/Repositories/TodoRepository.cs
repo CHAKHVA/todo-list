@@ -28,11 +28,6 @@ public class TodoRepository : ITodoRepository
         return await _context.Todos.FirstOrDefaultAsync(t => t.Title == title);
     }
 
-    public async Task<IEnumerable<Todo>> GetTodosByUserId(int userId)
-    {
-        return await _context.Todos.Where(t => t.UserId == userId).ToListAsync();
-    }
-
     public async Task CreateTodo(Todo todo)
     {
         await _context.Todos.AddAsync(todo);
